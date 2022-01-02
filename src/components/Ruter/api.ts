@@ -7,7 +7,7 @@ const enturClient = createEnturClient({
     clientName: 'smartMirrorNew',
 })
 
-export const getdeparturesFromStop = async ():Promise<Departure[]> => {
+export const getdeparturesFromStop = async (id: string):Promise<Departure[]> => {
     try {
         const departures = await enturClient.getDeparturesFromStopPlace(stopPlaces[0].id)
         console.log("get departures called", departures)

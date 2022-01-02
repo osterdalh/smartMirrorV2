@@ -14,21 +14,24 @@ const Ruter: React.FC = () => {
     const [uniqueDepartureRoutes, setUniqueDepartureRoutes] = useState<any[]>([])
 
     useEffect(() => {
-        getdeparturesFromStop().then(data => {
-            setdeparturesFromStop(data);
-            setUniqueDepartureRoutes(getUniqueRouteIds(data))
+        stopPlaces.forEach(stopPlace => {
+            getdeparturesFromStop(stopPlace.id).then(data => {
+                setdeparturesFromStop(data);
+                setUniqueDepartureRoutes(getUniqueRouteIds(data))
+                console.log("data", data)
+            })
+                .catch(err => console.log(err));
         })
+
     }, []);
 
     const getDepartureTimes = (lineNr: string, frontText: string, stopDepartures: Departure[]) => {
         const maximumNrOfDepartureTimes = 3;
-        console.log("lineNr", lineNr, frontText)
         const departureTimes = stopDepartures.filter(stopDeparture => {
             if (stopDeparture.serviceJourney.journeyPattern?.line.publicCode === lineNr && stopDeparture.destinationDisplay.frontText === frontText) {
                 return stopDeparture.expectedDepartureTime
-
             }
-
+            return undefined
         })
         return departureTimes.splice(0, maximumNrOfDepartureTimes)
     }
@@ -74,12 +77,11 @@ const Ruter: React.FC = () => {
             {
                 departuresFromStop[0] &&
                 stopPlaces.map((stopPlace) => {
-
+                    console.log("stopPlcae", stopPlace)
                     return <div key={stopPlace.id}>
                         <ListHeader>{stopPlace.name}</ListHeader>
                         {
                             uniqueDepartureRoutes.map((departureRoute, i) => {
-                                console.log(uniqueDepartureRoutes)
                                 return (
                                     <RowContainer key={departureRoute.lineNr + departureRoute.frontText + i}>
                                         <RowName>
@@ -87,9 +89,9 @@ const Ruter: React.FC = () => {
                                         </RowName>
                                         <RowData>
                                             {
-                                                departureRoute.departureTimes.map((time: { expectedDepartureTime: string }, index:any) =>
-                                                        <div key={index}>{getTimeToDeparture(time.expectedDepartureTime)}</div>
-                                                    )
+                                                departureRoute.departureTimes.map((time: { expectedDepartureTime: string }, index: any) =>
+                                                    <div key={index}>{getTimeToDeparture(time.expectedDepartureTime)}</div>
+                                                )
                                             }
                                         </RowData>
                                     </RowContainer>)
