@@ -1,27 +1,29 @@
 import { ListHeader } from '../List/style'
 import { useState, useEffect } from 'react'
-import { stopPlaces } from './types'
 import { getdeparturesFromStop } from './api'
 
 import { Departure } from '@entur/sdk'
 import { RowContainer, RowData, RowName, RuterWrapper } from './styles'
 
+type StoptopPlace = {
+    name: string,
+    id: string,
+}
 
-const Ruter: React.FC = () => {
+interface RuterProps {
+    stopPlace: StoptopPlace
+}
 
+const Ruter: React.FC<RuterProps> = ({ stopPlace }) => {
     const [departuresFromStop, setdeparturesFromStop] = useState<Departure[]>([]);
 
     const [uniqueDepartureRoutes, setUniqueDepartureRoutes] = useState<any[]>([])
-
     useEffect(() => {
-        stopPlaces.forEach(stopPlace => {
-            getdeparturesFromStop(stopPlace.id).then(data => {
-                setdeparturesFromStop(data);
-                setUniqueDepartureRoutes(getUniqueRouteIds(data))
-                console.log("data", data)
-            })
-                .catch(err => console.log(err));
+        getdeparturesFromStop(stopPlace.id).then(data => {
+            setdeparturesFromStop(data);
+            setUniqueDepartureRoutes(getUniqueRouteIds(data))
         })
+            .catch(err => console.log(err));
 
     }, []);
 
@@ -76,29 +78,26 @@ const Ruter: React.FC = () => {
         <RuterWrapper>
             {
                 departuresFromStop[0] &&
-                stopPlaces.map((stopPlace) => {
-                    console.log("stopPlcae", stopPlace)
-                    return <div key={stopPlace.id}>
-                        <ListHeader>{stopPlace.name}</ListHeader>
-                        {
-                            uniqueDepartureRoutes.map((departureRoute, i) => {
-                                return (
-                                    <RowContainer key={departureRoute.lineNr + departureRoute.frontText + i}>
-                                        <RowName>
-                                            <div>{`${departureRoute.lineNr} ${departureRoute.frontText}`}</div>
-                                        </RowName>
-                                        <RowData>
-                                            {
-                                                departureRoute.departureTimes.map((time: { expectedDepartureTime: string }, index: any) =>
-                                                    <div key={index}>{getTimeToDeparture(time.expectedDepartureTime)}</div>
-                                                )
-                                            }
-                                        </RowData>
-                                    </RowContainer>)
-                            })
-                        }
-                    </div>
-                })
+                <div key={stopPlace.id}>
+                    <ListHeader>{stopPlace.name}</ListHeader>
+                    {
+                        uniqueDepartureRoutes.map((departureRoute, i) => {
+                            return (
+                                <RowContainer key={departureRoute.lineNr + departureRoute.frontText + i}>
+                                    <RowName>
+                                        <div>{`${departureRoute.lineNr} ${departureRoute.frontText}`}</div>
+                                    </RowName>
+                                    <RowData>
+                                        {
+                                            departureRoute.departureTimes.map((time: { expectedDepartureTime: string }, index: any) =>
+                                                <div key={index}>{getTimeToDeparture(time.expectedDepartureTime)}</div>
+                                            )
+                                        }
+                                    </RowData>
+                                </RowContainer>)
+                        })
+                    }
+                </div>
             }
         </RuterWrapper>
     );
