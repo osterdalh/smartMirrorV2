@@ -8,6 +8,8 @@ grid-row-end: -1;
 text-align: left;
 
 border: 1px solid red;
+height: 100%;
+overflow: hidden;
 `
 export const RowContainer = styled.div`
 display: grid;

@@ -12,6 +12,6 @@ h1 {
 `
 export const SecContainer = styled.span`
     font-size: 0.5em;
+    padding: 0.2em;
     position: absolute;
-    color: #ffffff99;
 `

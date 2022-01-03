@@ -1,11 +1,13 @@
 type Colors = {
     black: string;
+    lightBlack: string;
     white: string;
 }
 
 const colors: Colors = {
-    black: '#111111',
-    white: '#FFFFF'
+    black: '#000000',
+    lightBlack: '#0000009c',
+    white: '#FFFFFF'
 }
 
 const spacing = {

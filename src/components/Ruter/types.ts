@@ -6,5 +6,9 @@ export const stopPlaces = [
     {
         name: 'Skøyen', 
         id:'NSR:StopPlace:58287'
+    },
+    {
+        name: 'Aker Brygge', 
+        id:'NSR:StopPlace:58382'
     }
 ]

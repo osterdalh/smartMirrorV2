@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import theme from './theme';
 
 const SiteGlobalStyles = createGlobalStyle`
 
@@ -9,9 +10,9 @@ const SiteGlobalStyles = createGlobalStyle`
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 400;
     font-style: normal;
-        line-height: 1.25;
+    line-height: 1.25;
     text-align: center;
-    background-color: #f8f9fd;
+    background-color: ${theme.colors.black};
     color: white;
   }
 

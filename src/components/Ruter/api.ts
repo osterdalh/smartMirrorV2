@@ -1,4 +1,3 @@
-import { stopPlaces } from './types'
 import { Departure } from '@entur/sdk'
 
 
@@ -9,8 +8,7 @@ const enturClient = createEnturClient({
 
 export const getdeparturesFromStop = async (id: string):Promise<Departure[]> => {
     try {
-        const departures = await enturClient.getDeparturesFromStopPlace(stopPlaces[0].id)
-        console.log("get departures called", departures)
+        const departures = await enturClient.getDeparturesFromStopPlace(id)
         return departures
     }
     catch (err) {
