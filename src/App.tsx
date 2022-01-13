@@ -6,12 +6,16 @@ import TimeDate from './components/TimeDate'
 import Weather from './components/Weather';
 import SiteGlobalStyles from './styles/globalStyles';
 import { stopPlaces } from './components/Ruter/types'
+import Calendar from './components/Calendar';
+
+
 function App() {
   return (
     <>
       <SiteGlobalStyles />
       <PageLayout>
         <TimeDate />
+        <Calendar/>
         {/* <Weather /> */}
         {
           stopPlaces.map(stopPlace => {

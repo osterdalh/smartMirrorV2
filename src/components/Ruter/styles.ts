@@ -7,7 +7,6 @@ grid-row-start: 5;
 grid-row-end: -1;
 text-align: left;
 
-border: 1px solid red;
 height: 100%;
 overflow: hidden;
 `
