@@ -6,7 +6,7 @@ type Colors = {
 
 const colors: Colors = {
     black: '#000000',
-    lightBlack: '#0000009c',
+    lightBlack: '#797979',
     white: '#FFFFFF'
 }
 
