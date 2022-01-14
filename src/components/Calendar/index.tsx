@@ -1,4 +1,3 @@
-
 import { useState, useEffect, Key } from 'react';
 import { EventRow } from './styles';
 
@@ -101,49 +100,33 @@ const Calendar: React.FC = () => {
             'timeMin': (new Date()).toISOString(),
             'showDeleted': false,
             'singleEvents': true,
-            'maxResults': 10,
+            'maxResults': maxNrEvents,
             'orderBy': 'startTime'
         }).then(function (response: { result: { items: any; }; }) {
             var events = response.result.items;
-            console.log("events", events)
             setCalendarItems(events)
-            // appendPre('Upcoming events:');
 
-            // if (events.length > 0) {
-            //     for (let i = 0; i < events.length; i++) {
-            //         var event = events[i];
-            //         var when = event.start.dateTime;
-            //         if (!when) {
-            //             when = event.start.date;
-            //         }
-            //         appendPre(event.summary + ' (' + when + ')')
-            //     }
-            // } else {
-            //     appendPre('No upcoming events found.');
-            // }
         });
     }
 
+    const maxNrEvents = 8;
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
         'August', 'September', 'October', 'November', 'December'];
 
-    const getDays = (dateNow: Date, eventDate: Date) => {
-        const day = 1000*60*60*24
+    const getDays = (eventDate: Date) => {
+        const day = 1000 * 60 * 60 * 24
         const d = new Date();
-        d.setHours(0,0,0,0)
+        d.setHours(0, 0, 0, 0)
 
         const msToEvent = eventDate.getTime() - d.getTime()
-        console.log('msToEvent', msToEvent)
 
-        return Math.floor(msToEvent/day)
+        return Math.floor(msToEvent / day)
     }
 
     const getEventTime = (startDate: string, startDateTime: string) => {
-        const dateNow = new Date()
         const eventDate = new Date(startDateTime ? startDateTime : startDate)
-        const daysToEvent = getDays(dateNow, eventDate)
-        console.log("days to event", Math.floor(daysToEvent))
+        const daysToEvent = getDays(eventDate)
         if (daysToEvent > 2) {
             return `${eventDate.getDate()}. ${months[eventDate.getMonth()]}`
         }
@@ -162,7 +145,7 @@ const Calendar: React.FC = () => {
             <pre id="content" style={{ whiteSpace: "pre-wrap" }}></pre>
 
             {calendarItems.map((event: { start: { date: string; dateTime: string }; summary: string }, i: Key | null | undefined) => {
-                return <EventRow key={i}>
+                return <EventRow key={i} daysToEvent={getDays(event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date))}>
                     <div>{event.summary}</div>
                     <div>{getEventTime(event.start.date, event.start.dateTime)}</div>
 

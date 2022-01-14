@@ -14,7 +14,6 @@ const PageLayout: React.FC = ({ children }) => {
 
     const ReactGridLayout = WidthProvider(RGL);
 
-    console.log("childre", children)
 
     const layout = [
         { i: '1', x: 5, y: 1, w: 5, h: 5 },
