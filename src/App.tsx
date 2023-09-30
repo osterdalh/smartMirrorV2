@@ -1,6 +1,6 @@
 import './App.css';
 // import { PageLayout } from './components/PageLayout/styles'
-import PageLayout from './components/PageLayout'
+import PageLayout from './components/pageLayout'
 import Ruter from './components/Ruter';
 import TimeDate from './components/TimeDate'
 import Weather from './components/Weather';
@@ -34,7 +34,7 @@ const App: React.FC = () => {
       <PageLayout>
         <TimeDate />
         <Calendar />
-        {/* <Weather /> */}
+        <Weather />
         {
           stopPlaces.map(stopPlace => {
             return <Ruter key={stopPlace.id} stopPlace={stopPlace}></Ruter>

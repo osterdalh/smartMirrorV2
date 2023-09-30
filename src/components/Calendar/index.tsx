@@ -105,6 +105,7 @@ const Calendar: React.FC = () => {
         }).then(function (response: { result: { items: any; }; }) {
             var events = response.result.items;
             setCalendarItems(events)
+            console.log("setCalendarItems", response)
 
         });
     }
@@ -124,18 +125,39 @@ const Calendar: React.FC = () => {
         return Math.floor(msToEvent / day)
     }
 
-    const getEventTime = (startDate: string, startDateTime: string) => {
-        const eventDate = new Date(startDateTime ? startDateTime : startDate)
-        const daysToEvent = getDays(eventDate)
-        if (daysToEvent > 2) {
-            return `${eventDate.getDate()}. ${months[eventDate.getMonth()]}`
+    const getTime = (dateTime: Date) => {
+        console.log("dateTime", dateTime.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' }))
+        return dateTime.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' })
+    }
+
+    const getEventTime = (event:Event) => {
+        const startEventDate = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date)
+        const endEventDate = event.end.dateTime ? new Date(event.end.dateTime) : new Date(event.end.date)
+      
+         
+        const daysToEvent = getDays(startEventDate)
+        if (daysToEvent > 1) {
+            return `${startEventDate.getDate()}. ${months[startEventDate.getMonth()]} ${event.start.dateTime ? `from ${getTime(startEventDate)} - ${getTime(endEventDate)}` : ''}`
         }
         else if (daysToEvent === 1) {
-            return `Tomorrow ${startDateTime ? `at ${eventDate.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' })}` : ''}`
+            return `Tomorrow ${event.start.dateTime ? `from ${getTime(startEventDate)} - ${getTime(endEventDate)}` : ''}`
         }
         else if (daysToEvent === 0) {
-            return `Today ${startDateTime ? `at ${eventDate.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' })}` : ''}`
+            return `Today ${event.start.dateTime ? `at ${getTime(startEventDate)}-${getTime(endEventDate)}` : ''}`
         }
+    }
+
+    interface Event {
+        start: {
+            dateTime: string
+            date: string
+        };
+        end: {
+            dateTime: string
+            date: string
+
+        };
+        summary: string
     }
 
     return (
@@ -144,10 +166,10 @@ const Calendar: React.FC = () => {
             <button id="signout_button" style={{ display: "none" }}>Sign Out</button>
             <pre id="content" style={{ whiteSpace: "pre-wrap" }}></pre>
 
-            {calendarItems.map((event: { start: { date: string; dateTime: string }; summary: string }, i: Key | null | undefined) => {
+            {calendarItems.map((event: Event, i: Key | null | undefined) => {
                 return <EventRow key={i} daysToEvent={getDays(event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date))}>
                     <div>{event.summary}</div>
-                    <div>{getEventTime(event.start.date, event.start.dateTime)}</div>
+                    <div>{getEventTime(event)}</div>
 
                 </EventRow>
             })}

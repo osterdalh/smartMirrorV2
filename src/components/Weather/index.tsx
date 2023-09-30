@@ -1,57 +1,67 @@
-import { WeatherWrapper, TempAndIconWrapper, ArrowContainer } from './styles'
+import { WeatherWrapper, TempAndIconWrapper, ArrowContainer, WindAndSun, WindContainer } from './styles'
 import { useState, useEffect } from 'react';
-import { getCurrentWeatherForecast } from '../../api';
-import weatherIcons from './icons/resolver';
-import { WiDirectionUp } from 'react-icons/wi';
+import { getCurrentWeatherForecast, getSunsetSunrise } from '../../api';
+import React from 'react';
+import getIcon from './iconsNew/index'
+import WindIcon from './iconsNew/arrow-narrow-up-svgrepo-com';
+import SunriseIcon from './iconsNew/sunrise-svgrepo-com';
+import SunsetIcon from './iconsNew/sunset-svgrepo-com';
 
 const Weather: React.FC = () => {
     const [weather, setWeather] = useState<null | { [key: string]: any }>(null)
 
     useEffect(() => {
-        const weatherId = setInterval(getWeatherForecast, 1000000);
-        return function cleanup() {
-            clearInterval(weatherId);
-        };
-    });
+        getWeatherForecast()
+        {getSunsetSunrise(cities[1].lat, cities[1].lon)}
+
+    }, []);
+
 
     const cities = {
         1: {
-            city: 'Oslo',
+            city: 'Svolvær',
             altitude: '0',
-            lat: '59.911322',
-            lon: '10.733997'
+            lat: '68.2392848',
+            lon: '14.5433442'
         }
     }
 
     const getWeatherForecast = async () => {
         const data = await getCurrentWeatherForecast(cities[1].lat, cities[1].lon)
-        setWeather(data.properties);
+        console.log("data", data)
+
+        setWeather(data);
     }
 
-    const getWeatherIcon = (): any => {
-        if (weather) {
-            // const iconName = String(weather.timeseries[0].data.next_1_hours.summary.symbol_code);
-            console.log("weather", weather)
-            return weatherIcons['cloudy']
-        }
+    // const getWeatherIcon = (): any => {
+    //     if (weather) {
+    //         // const iconName = String(weather.timeseries[0].data.next_1_hours.summary.symbol_code);
+    //         console.log("weather", weather)
+    //         return weatherIcons['cloudy']
+    //     }
 
-    }
+    // }
 
+   
     return (
         weather && <WeatherWrapper>
             <TempAndIconWrapper>
-                <div>
-                    <h1>{Math.round(weather.timeseries[0].data.instant.details.air_temperature)}°C</h1>
-                    <h3>{Math.round(weather.timeseries[0].data.instant.details.wind_speed)}m/s
-                        <ArrowContainer angle={weather.timeseries[0].data.instant.details.wind_from_direction}><WiDirectionUp></WiDirectionUp></ArrowContainer>
-                    </h3>
+                
+                <div>{Math.round(weather.properties.timeseries[0].data.instant.details.air_temperature)} °C</div>
 
-                </div>
-                <div>
-                    {getWeatherIcon()}
-                </div>
+                <div>{getIcon(weather.properties.timeseries[0].data.next_1_hours.summary.symbol_code)}</div>
             </TempAndIconWrapper>
-            
+            <WindAndSun >
+                <WindContainer windAngle={weather.properties.timeseries[0].data.instant.details.wind_from_direction}>
+                    <WindIcon></WindIcon>
+                    {Math.round(weather.properties.timeseries[0].data.instant.details.wind_speed)} ({Math.round(weather.properties.timeseries[0].data.instant.details.wind_speed_of_gust)}) m/s
+                </WindContainer>
+                <div>
+                    <SunriseIcon></SunriseIcon>
+                    <SunsetIcon></SunsetIcon>
+                </div>
+            </WindAndSun>
+
 
 
         </WeatherWrapper>
