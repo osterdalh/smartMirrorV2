@@ -30,8 +30,8 @@ const TimeDate: React.FC = () => {
 
   return (
     <TimeDateWrapper>
-      <h3>{`${days[timeDate.getDay()]} ${timeDate.getDate()}.  ${months[timeDate.getMonth()]} ${timeDate.getFullYear()}`}</h3>
       <h1>{timeDate.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit'})}<SecContainer>{formatSec(timeDate.getSeconds())}</SecContainer></h1>
+      <h3>{`${days[timeDate.getDay()]} ${timeDate.getDate()}.  ${months[timeDate.getMonth()]} ${timeDate.getFullYear()}`}</h3>
     </TimeDateWrapper>
   );
 };

@@ -1,5 +1,6 @@
 import { useState, useEffect, Key } from 'react';
 import { EventRow } from './styles';
+import { ListHeader } from '../List/style';
 
 declare global {
     interface Window {
@@ -23,7 +24,6 @@ const Calendar: React.FC = () => {
     useEffect(() => {
 
         window.gapi.load('client:auth2', initClient);
-
     }, []);
 
     const initClient = () => {
@@ -110,7 +110,7 @@ const Calendar: React.FC = () => {
         });
     }
 
-    const maxNrEvents = 8;
+    const maxNrEvents = 5;
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
         'August', 'September', 'October', 'November', 'December'];
@@ -130,11 +130,11 @@ const Calendar: React.FC = () => {
         return dateTime.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' })
     }
 
-    const getEventTime = (event:Event) => {
+    const getEventTime = (event: Event) => {
         const startEventDate = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date)
         const endEventDate = event.end.dateTime ? new Date(event.end.dateTime) : new Date(event.end.date)
-      
-         
+
+
         const daysToEvent = getDays(startEventDate)
         if (daysToEvent > 1) {
             return `${startEventDate.getDate()}. ${months[startEventDate.getMonth()]} ${event.start.dateTime ? `from ${getTime(startEventDate)} - ${getTime(endEventDate)}` : ''}`
@@ -161,7 +161,8 @@ const Calendar: React.FC = () => {
     }
 
     return (
-        <div>Calendar
+        <div>
+            <ListHeader>Calendar</ListHeader>
             <button id="authorize_button" style={{ display: "block" }}>Authorize</button>
             <button id="signout_button" style={{ display: "none" }}>Sign Out</button>
             <pre id="content" style={{ whiteSpace: "pre-wrap" }}></pre>
