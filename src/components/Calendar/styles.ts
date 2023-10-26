@@ -6,18 +6,18 @@ type EventRowProps = {
 
 
 export const EventRow = styled.div<EventRowProps>`
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     text-transform: capitalize;
     font-size: ${({ daysToEvent }) => {
-        if (daysToEvent === 0 ){
-            return '2rem'
-        }
-        else if(daysToEvent === 1){
+        if (daysToEvent === 0) {
             return '1.5rem'
         }
+        else if (daysToEvent === 1) {
+            return '1rem'
+        }
         else return 'initial'
-    } };
+    }};
 `
 
 
